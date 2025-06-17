@@ -21,11 +21,6 @@
 
 > Interface web interactive pour visualiser et explorer les tendances des actualités sénégalaises analysées par Topic Modeling
 
-[![Python](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/downloads/)
-[![Dash](https://img.shields.io/badge/Dash-2.14+-red.svg)](https://dash.plotly.com/)
-[![Render](https://img.shields.io/badge/Deploy-Render-46E3B7.svg)](https://render.com/)
-[![Live Demo](https://img.shields.io/badge/Demo-Live-brightgreen.svg)](https://sene-scraper.onrender.com)
-
 ## 🎯 Description
 
 Cette application Dash constitue l'interface utilisateur interactive du projet d'analyse des tendances médiatiques sénégalaises. Elle permet de visualiser les résultats du Topic Modeling LDA appliqué aux articles collectés depuis SeneWeb et Senego.
