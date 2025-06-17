@@ -2,7 +2,7 @@ import pandas as pd
 import dateparser
 import requests
 import joblib
-import os
+import io
 import nltk
 import re
 from nltk.corpus import stopwords
@@ -68,32 +68,38 @@ def get_data():
 
     return df
 
-def load_lda_model(model_url, vectorizer_url, model_path="lda_model.joblib", vectorizer_path="vectorizer.joblib"):
+def load_lda_model(model_url, vectorizer_url):
     """
-    Télécharge et charge un modèle LDA et son vectorizer.
+    Télécharge et charge un modèle LDA et son vectorizer directement depuis des URLs.
 
     Arguments :
         model_url (str)       : URL GitHub raw du modèle LDA .joblib
         vectorizer_url (str)  : URL GitHub raw du vectorizer .joblib
-        model_path (str)      : Chemin local pour enregistrer le modèle
-        vectorizer_path (str) : Chemin local pour enregistrer le vectorizer
 
     Retourne :
         (lda_model, vectorizer)
     """
-    def download(url, path):
-        if not os.path.exists(path):
-            r = requests.get(url)
-            if r.status_code == 200:
-                with open(path, "wb") as f:
-                    f.write(r.content)
-            else:
-                raise Exception(f"Erreur lors du téléchargement : {url} (code {r.status_code})")
+    def download(url):
+        """
+        Télécharge le contenu d'une URL et retourne un objet BytesIO pour joblib.
 
-    download(model_url, model_path)
-    download(vectorizer_url, vectorizer_path)
+        Arguments :
+            url (str) : URL du fichier à télécharger
 
-    lda_model = joblib.load(model_path)
-    vectorizer = joblib.load(vectorizer_path)
+        Retourne :
+            io.BytesIO : Contenu du fichier sous forme de bytes
+        """
+        r = requests.get(url)
+        if r.status_code == 200:
+            return io.BytesIO(r.content)
+        else:
+            raise Exception(f"Erreur lors du téléchargement : {url} (code {r.status_code})")
+
+    # Télécharger et charger le modèle et le vectorizer directement en mémoire
+    model_data = download(model_url)
+    vectorizer_data = download(vectorizer_url)
+
+    lda_model = joblib.load(model_data)
+    vectorizer = joblib.load(vectorizer_data)
 
     return lda_model, vectorizer
